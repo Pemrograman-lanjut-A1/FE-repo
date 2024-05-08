@@ -16,7 +16,7 @@ import ViewWaitingTopUps from './pages/staff-dashboard/view-waiting-top-ups';
 import TopUpHomePage from './pages/payment/topup/TopUpHomePage';
 import CreateTopUpPage from './pages/payment/topup/CreateTopUpPage';
 import CartPage from './pages/buy/CartPage';
-
+import CheckoutPage from './pages/buy/CheckoutPage';
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
           <Route path="/topup/create" element={<CreateTopUpPage/>} />
 
           <Route path="/cart" element={<CartPage/>} />
-
+          <Route path="/checkout" element={<CheckoutPage/>} />
       </Routes>
     </Router>
 );
