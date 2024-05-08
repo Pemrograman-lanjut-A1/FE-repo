@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {deleteAnnouncementPost} from './delete-announcement-post';
 import "./css/view-announcements-page.css"
+import Navbar from '../../../navbar';
 
 
 const ViewAnnouncementsPage = () => {
@@ -34,6 +35,7 @@ const ViewAnnouncementsPage = () => {
 
   return (
       <div>
+        <Navbar/>
           <h1>View All Announcements from Spring Boot:</h1>
           {announcements.map(announcement => (
               <div key={announcement.id} className="announcement-card">

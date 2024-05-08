@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createAnnouncementPost } from './create-announcement-post';
-
+import Navbar from '../../../navbar';
 const CreateAnnouncementPage = () => {
   const [announcementText, setAnnouncementText] = useState('');
 
@@ -22,6 +22,7 @@ const CreateAnnouncementPage = () => {
 
   return (
     <div>
+      <Navbar />
       <h2>Create Announcement</h2>
       <textarea
         value={announcementText}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { confirmTopUpPut } from './confirm-top-up-put';
 import "./css/view-waiting-topups-page.css"
+import Navbar from '../../../navbar';
 
 
 const ViewWaitingTopUpsPage = () => {
@@ -34,6 +35,7 @@ const ViewWaitingTopUpsPage = () => {
 
   return (
       <div>
+        <Navbar/>
           <h1>View All Waiting Top Ups from Spring Boot:</h1>
           {topups.map(topup => (
               <div key={topup.id} className="topup-card">
