@@ -16,9 +16,10 @@ import TopUpHomePage from './pages/payment/topup/TopUpHomePage';
 import CreateTopUpPage from './pages/payment/topup/CreateTopUpPage';
 import MyReportsPage from "./pages/report/MyReportsPage";
 import ReportReceivedPage from "./pages/report/ReportReceivedPage";
-
+import ItemReports from './pages/report/ItemReports'
 function App() {
   return (
+
     <Router>
       <Routes>
           <Route exact path="/" element={<Home />} />
@@ -35,8 +36,11 @@ function App() {
           <Route path="/topup/" element={<TopUpHomePage/>} />
           <Route path="/report/my-reports" element={<MyReportsPage/>}/>
           <Route path="/report/reports-received" element={<ReportReceivedPage/>}/>
+          <Route path="/report/item-reports/:itemId" element={<ItemReports/>} />
+
       </Routes>
     </Router>
+
 );
 }
 
