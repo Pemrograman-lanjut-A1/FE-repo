@@ -3,6 +3,9 @@ import PaymentService from "../services/topUpSevice/TopUpServices";
 import WalletService from "../services/walletService/WalletService";
 import Toast from 'react-bootstrap/Toast'
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const PaymentPage = () => {
     const [topUps, setTopUps] = useState([]);
@@ -10,11 +13,18 @@ const PaymentPage = () => {
     const [topUpMethods, setTopUpMethods] = useState([]);
     const [showToast, setShowToast] = useState(false);
     const [walletAmount, setWalletAmount] = useState([]);
+    const [descriptionToast, setDescriptionToast] = useState([]);
+    const [topUpId, setTopUpId] = useState([]);
+
+    const toggleShowToast = () => setShowToast(!showToast);
 
     useEffect(() => {
       fetchTopUps();
       fetchWallet();
     }, []);
+
+    const changeAmount = (amount) => setAmount(amount);
+    const changeTopUpMethods = (topUpMethod) => setTopUpMethods(topUpMethod);
 
     const fetchTopUps = async () => {
       try {
@@ -43,11 +53,49 @@ const PaymentPage = () => {
                 topUpMethod: topUpMethods 
             };
             await PaymentService.createTopUp(topUpData);
-            fetchTopUps();
+            setDescriptionToast("Berhasil membuat top up!")
             document.getElementById('addmodal').classList.remove('show');
             document.body.classList.remove('modal-open');
+            fetchTopUps();
             setShowToast(true);
         } catch (error) {
+            console.error("Error creating top-up:", error);
+            setDescriptionToast(error);
+            setShowToast(true);
+        }
+    }
+
+    const deleteTopUp = async () => {
+        try {
+            const idTopUp = topUpId;
+            await PaymentService.deleteTopUpById(idTopUp);
+            setDescriptionToast("Berhasil menghapus top up!")
+            fetchTopUps();
+            setShowToast(true);
+        }catch (error) {
+            console.error("Error creating top-up:", error);
+        }
+    }
+
+    const deleteAllTopUp = async () => {
+        try {
+            await PaymentService.deleteAllTopUp();
+            setDescriptionToast("Berhasil menghapus semua top up!")
+            fetchTopUps();
+            setShowToast(true);
+        }catch (error) {
+            console.error("Error creating top-up:", error);
+        }
+    }
+
+    const cancelTopUp = async () => {
+        try {
+            const idTopUp = topUpId;
+            await PaymentService.cancelTopUp(idTopUp);
+            setDescriptionToast("Berhasil me-cancel top up!")
+            fetchTopUps();
+            setShowToast(true);
+        }catch (error) {
             console.error("Error creating top-up:", error);
         }
     }
@@ -75,15 +123,14 @@ const PaymentPage = () => {
             </div>
             <div className="d-flex justify-content-between">
                 <p className="fs-3">Histori TopUp</p>
-                <div className="d-flex gap-2">
-                    <button type="button" className="btn btn-primary fw-bold rounded-pill" data-bs-target="#addmodal" data-bs-toggle="modal">
-                        <span className="fw-bold">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" className="bi bi-plus fw-bold" viewBox="0 0 16 16">
-                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                            </svg>
-                        </span>tambah
-                    </button>
-                    <button type="button" className="btn btn-danger fw-bold rounded-pill">Hapus</button>
+                <div className="">
+                    <Dropdown as={ButtonGroup}>
+                        <Button variant="success" data-bs-target="#addmodal" data-bs-toggle="modal">Tambah TopUp</Button>
+                        <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                        <Dropdown.Menu>
+                            <Dropdown.Item data-bs-toggle="modal" data-bs-target="#deleteAllModal">Hapus Semua</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
             </div>
             <div>
@@ -109,17 +156,16 @@ const PaymentPage = () => {
                                     <span className={`badge rounded-pill text-bg-${getStatusBadgeClass(topUp.status)} fs-6`}>{topUp.status}</span>
                                 </td>
                                 <td>
-                                    <div className="dropdown">
-                                        <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-                                            </svg>  
-                                        </button>
-                                        <ul className="dropdown-menu fw-bold">
-                                            <li><p className="dropdown-item">Cancel</p></li>
-                                            <li><p className="dropdown-item">Hapus</p></li>
-                                        </ul>
-                                    </div>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu>
+                                            {topUp.topUpMethod !== "CANCELLED" && (
+                                                <Dropdown.Item data-bs-toggle="modal" data-bs-target="#cancelModal" onClick={() => setTopUpId(topUp.id)}>Cancel</Dropdown.Item>
+                                            )}
+                                            <Dropdown.Item data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setTopUpId(topUp.id)}>Hapus</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                 </td>
                             </tr>
                         ))}
@@ -137,11 +183,11 @@ const PaymentPage = () => {
                         <form>
                             <div class="mb-3">
                                 <label for="recipient-name" class="col-form-label">Amount</label>
-                                <input onChange={(e) => setAmount(e.target.value)} type="number" class="form-control" id="recipient-name"/>
+                                <input onChange={(e) => changeAmount(e.target.value)} type="number" class="form-control" id="recipient-name"/>
                             </div>
                             <div class="mb-3">
                                 <label for="message-text" class="col-form-label">Metode Top Up</label>
-                                <select onChange={(e) => setTopUpMethods(e.target.value)} class="form-select" aria-label="Default select example">
+                                <select onChange={(e) => changeTopUpMethods(e.target.value)} class="form-select" aria-label="Default select example">
                                     <option selected>Pilih Metode Top Up</option>
                                     <option value="TRANSFER_BANK">Transfer Bank</option>
                                     <option value="KARTU_KREDIT">Kartu Kredit</option>
@@ -159,15 +205,66 @@ const PaymentPage = () => {
             </div>
             {showToast && (
                 <ToastContainer position="bottom-end">
-                    <Toast>
+                    <Toast show={showToast} onClose={toggleShowToast} delay={3000} autohide>
                             <Toast.Header>
                                 <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
                                 <strong className="me-auto">TopUp</strong>
                                 </Toast.Header>
-                            <Toast.Body>Top-up berhasil dibuat!</Toast.Body>
+                            <Toast.Body>{descriptionToast}</Toast.Body>
                     </Toast>
                 </ToastContainer>
             )}
+            <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Top Up</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah anda yakin ingin menghapus top up ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={deleteTopUp}>Yakin</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="deleteAllModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Top Up</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah anda yakin ingin menghapus semua top up?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={deleteAllTopUp}>Yakin</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="cancelModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Hapus Top Up</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah anda yakin ingin mencancel top up ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onClick={cancelTopUp}>Yakin</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
