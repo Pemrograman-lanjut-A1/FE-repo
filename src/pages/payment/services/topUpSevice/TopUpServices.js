@@ -2,12 +2,21 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080";
 
-const PaymentService = {
+const TopUpService = {
   getAllTopUps: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/topup/`);
       return response.data;
     } catch (error) {
+      throw error.response.data.message;
+    }
+  },
+
+  deleteAllTopUp: async () => {
+    try {
+      const response = await axios.delete(`${BASE_URL}/topup/`);
+      return response.data;
+    }catch (error) {
       throw error.response.data.message;
     }
   },
@@ -67,4 +76,4 @@ const PaymentService = {
   },
 };
 
-export default PaymentService;
+export default TopUpService;
