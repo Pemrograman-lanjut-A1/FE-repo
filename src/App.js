@@ -12,6 +12,8 @@ import ViewAnnouncements from './pages/staff-dashboard/view-announcements';
 import ViewWaitingPayments from './pages/staff-dashboard/view-waiting-payments';
 import ViewWaitingTopUps from './pages/staff-dashboard/view-waiting-top-ups';
 import PaymentPage from './pages/payment/topup/PaymentPage';
+import LoginPage from './pages/auth/pages/LoginPage';
+import RegisterPage from './pages/auth/pages/RegisterPage';
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
     <Router>
       <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/signin" element={<LoginPage />} />
+          <Route exact path="/signup" element={<RegisterPage />} />
           <Route path="/staff/homepage" element={<StaffHomePage />} />
           <Route
               path="/staff/view-announcement"
