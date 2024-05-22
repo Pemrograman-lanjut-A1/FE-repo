@@ -1,6 +1,6 @@
 async function confirmTopUpPut(topUpId){
     try {
-        const response = await fetch('http://localhost:8080/staff/confirm-topup', {
+        const response = await fetch('34.128.118.113/staff/confirm-topup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

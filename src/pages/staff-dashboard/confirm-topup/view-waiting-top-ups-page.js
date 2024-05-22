@@ -11,7 +11,7 @@ const ViewWaitingTopUpsPage = () => {
   const [topups, setTopUps] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:8080/staff/view-waiting-top-ups')
+      axios.get('34.128.118.113/staff/view-waiting-top-ups')
           .then(response => {
               setTopUps(response.data);
           })

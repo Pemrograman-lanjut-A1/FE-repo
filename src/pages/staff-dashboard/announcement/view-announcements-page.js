@@ -3,20 +3,41 @@ import axios from 'axios';
 import {deleteAnnouncementPost} from './delete-announcement-post';
 import "./css/view-announcements-page.css"
 import Navbar from '../../../navbar';
+import AuthService from '../../auth/service/AuthService';
+
 
 
 const ViewAnnouncementsPage = () => {
+    var error_code;
+    const [userId, setUserId] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
+    try {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decodedToken = AuthService.parseJwt(token);
+            const userId = decodedToken.Id; 
+            setUserId(userId)
+        }
+        else{
+            error_code = "error token";
+        }
+    } catch (error) {
+        console.error("Something happened?", error);
+        error_code = "error something";
+    }
   console.log('View announcements rendered');
 
-  const [announcements, setAnnouncements] = useState([]);
 
   useEffect(() => {
-      axios.get('http://localhost:8080/staff/get-all-announcements')
+      axios.get('http://34.128.118.113/staff/get-all-announcements')
           .then(response => {
               setAnnouncements(response.data);
           })
           .catch(error => {
               console.error('Error fetching announcements:', error);
+              error_code = "Error backend"
+              return(<h1>{error_code}</h1>)
+              
           });
   }, []);
 
@@ -32,6 +53,10 @@ const ViewAnnouncementsPage = () => {
               // Handle error if needed
           });
   };
+
+  if (error_code){
+    return(<h1>{error_code}</h1>)
+  }
 
   return (
       <div>
