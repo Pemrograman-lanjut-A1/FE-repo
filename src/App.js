@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 
 import React from "react";
@@ -16,12 +15,19 @@ import TopUpHomePage from './pages/payment/topup/TopUpHomePage';
 import CreateTopUpPage from './pages/payment/topup/CreateTopUpPage';
 import CreateAnnouncementPost from './pages/staff-dashboard/announcement/create-announcement-post';
 import CreateAnnouncementPage from './pages/staff-dashboard/announcement/create.announcement.page';
+import ViewWaitingTopUps from './pages/staff-dashboard/view-waiting-top-ups';
+import PaymentPage from './pages/payment/topup/PaymentPage';
+import LoginPage from './pages/auth/pages/LoginPage';
+import RegisterPage from './pages/auth/pages/RegisterPage';
+
 
 function App() {
   return (
     <Router>
       <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/signin" element={<LoginPage />} />
+          <Route exact path="/signup" element={<RegisterPage />} />
           <Route path="/staff/homepage" element={<StaffHomePage />} />
           <Route
               path="/staff/view-announcement"
@@ -33,6 +39,11 @@ function App() {
 
           <Route path="/topup/" element={<TopUpHomePage/>} />
           <Route path="/topup/create" element={<CreateTopUpPage/>}/>
+          <Route
+              path="/staff/view-waiting-top-ups"
+              element={<ViewWaitingTopUps />}
+          />
+          <Route path="/payment/" element={<PaymentPage/>} />
       </Routes>
     </Router>
 );
