@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import AuthService from "../../auth/service/AuthService";
-import axios from "axios";
 
 const PaymentPage = () => {
     const [topUps, setTopUps] = useState([]);
@@ -36,6 +35,7 @@ const PaymentPage = () => {
                 const decodedToken = AuthService.parseJwt(token);
                 const userId = decodedToken.Id; 
                 setUserId(userId)
+                setLoggedIn(true);
                 console.log(userId + " wdjawnda")
                 const wallet = await WalletService.getWalletByUserId(userId);
                 setWalletAmount(wallet.data.amount)
