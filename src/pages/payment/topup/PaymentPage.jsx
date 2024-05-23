@@ -6,6 +6,9 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
+import AuthService from "../../auth/service/AuthService";
+import { useNavigate } from 'react-router-dom';
+import AuthMiddleware from "../../auth/service/AuthMiddleware";
 
 const PaymentPage = () => {
     const [topUps, setTopUps] = useState([]);
@@ -15,13 +18,59 @@ const PaymentPage = () => {
     const [walletAmount, setWalletAmount] = useState([]);
     const [descriptionToast, setDescriptionToast] = useState([]);
     const [topUpId, setTopUpId] = useState([]);
+    const [userWallet, setUserWallet] = useState(null);
+    const [userId, setUserId] = useState([]);
+    const [loggedIn, setLoggedIn] = useState(false);
 
     const toggleShowToast = () => setShowToast(!showToast);
+    const navigate = useNavigate();
 
     useEffect(() => {
-      fetchTopUps();
-      fetchWallet();
+        fetchUserWallet();
+        fetchTopUps();
+        fetchWallet();
+
+        if (!AuthMiddleware.isAuthenticated()) {
+            navigate('/signin');
+        }
     }, []);
+
+    const fetchUserWallet = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (token) {
+                const decodedToken = AuthService.parseJwt(token);
+                const userId = decodedToken.Id; 
+                setUserId(userId)
+                setLoggedIn(true);
+                console.log(userId + " wdjawnda")
+                const wallet = await WalletService.getWalletByUserId(userId);
+                setWalletAmount(wallet.data.amount)
+                setUserWallet(wallet.data);
+            }
+        } catch (error) {
+            console.error("Error fetching user wallet:", error);
+        }
+    };
+
+    const handleCreateWallet = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            if (token) {
+                setLoggedIn(true)
+                const decodedToken = AuthService.parseJwt(token);
+                const userId = decodedToken.Id; 
+                const walletData = {
+                    userId: userId, 
+                };
+                const wallet = await WalletService.createWallet(walletData);
+                setUserWallet(wallet.wallet);
+                setWalletAmount(wallet.wallet.amount)
+            }
+        } catch (error) {
+            console.error("Error creating user wallet:", error);
+        }
+    };
 
     const changeAmount = (amount) => setAmount(amount);
     const changeTopUpMethods = (topUpMethod) => setTopUpMethods(topUpMethod);
@@ -36,8 +85,7 @@ const PaymentPage = () => {
     };
     const fetchWallet = async () => {
         try {
-            const wallet = await WalletService.getWalletByUserId("3df9d41b-33c3-42a1-b0a4-43cf0ffdc649");
-            setWalletAmount(wallet.amount)
+            setWalletAmount(userWallet.amount)
         } catch (error) {
             console.error("Error fetching top-ups:", error);
         }
@@ -45,10 +93,9 @@ const PaymentPage = () => {
 
     const createTopUp = async () => {
         try {
-            const wallet = await WalletService.getWalletByUserId("3df9d41b-33c3-42a1-b0a4-43cf0ffdc649");
             const topUpData = {
-                userId: '3df9d41b-33c3-42a1-b0a4-43cf0ffdc649', 
-                walletId: wallet.id, 
+                userId: userId, 
+                walletId: userWallet.id, 
                 amount: amount, 
                 topUpMethod: topUpMethods 
             };
@@ -117,7 +164,26 @@ const PaymentPage = () => {
 
     return (
         <div className="container my-4">
-            <div>
+           {!userWallet && (
+                <div className="text-center">
+                    {!loggedIn? (
+                    <h1>Login dulu untuk melihat halaman ini</h1>
+                    ) : (
+                    <>
+                        <h1>Anda belum memiliki wallet</h1>
+                        <div className="card w-50 mx-auto mt-5 p-4">
+                        <div className="card-body">
+                            <h5 className="card-title">Buat Wallet</h5>
+                            <button className="btn btn-primary" onClick={handleCreateWallet}>Buat Wallet</button>
+                        </div>
+                        </div>
+                    </>
+                    )}
+                </div>
+            )}
+            {userWallet && (
+                <>
+                    <div>
                 <p className="fs-3">Uang kamu</p>
                 <p className="fs-4 ms-2 fw-bold">Rp.<span>{walletAmount}</span></p>
             </div>
@@ -265,6 +331,8 @@ const PaymentPage = () => {
                     </div>
                 </div>
             </div>
+                </>
+            )}
         </div>
     );
 };

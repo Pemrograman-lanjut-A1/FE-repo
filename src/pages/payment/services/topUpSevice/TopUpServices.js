@@ -13,7 +13,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
@@ -27,7 +27,7 @@ const TopUpService = {
     });
       return response.data;
     }catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
@@ -41,7 +41,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response;
     }
   },
 
@@ -55,7 +55,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
@@ -69,7 +69,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
@@ -83,7 +83,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
@@ -97,7 +97,7 @@ const TopUpService = {
     });
       return response.data;
     } catch (error) {
-      throw error.response.data.message;
+      throw error.response.data;
     }
   },
 
