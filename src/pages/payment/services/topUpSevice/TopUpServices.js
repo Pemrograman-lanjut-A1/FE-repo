@@ -1,11 +1,16 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8081";
+const BASE_URL = "http://34.142.213.219";
 
 const TopUpService = {
   getAllTopUps: async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/topup/`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/topup/`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data;
@@ -14,7 +19,12 @@ const TopUpService = {
 
   deleteAllTopUp: async () => {
     try {
-      const response = await axios.delete(`${BASE_URL}/topup/`);
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(`${BASE_URL}/topup/`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     }catch (error) {
       throw error.response.data;
@@ -23,14 +33,13 @@ const TopUpService = {
 
   createTopUp: async (topUpData) => {
     try {
-      const response = await axios.post(`${BASE_URL}/topup/create`, topUpData, 
-      {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${BASE_URL}/topup/create`, topUpData, {
         headers: {
-          'Content-Type': 'application/json'
+            'Authorization': `Bearer ${token}`
         }
-      }
-      );
-      return response;
+    });
+      return response.data;
     } catch (error) {
       throw error.response;
     }
@@ -38,7 +47,12 @@ const TopUpService = {
 
   deleteTopUpById: async (topUpId) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/topup/${topUpId}/delete`);
+      const token = localStorage.getItem('token');
+      const response = await axios.delete(`${BASE_URL}/topup/${topUpId}/delete`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data;
@@ -47,7 +61,12 @@ const TopUpService = {
 
   cancelTopUp: async (topUpId) => {
     try {
-      const response = await axios.put(`${BASE_URL}/topup/${topUpId}/cancel`);
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${BASE_URL}/topup/${topUpId}/cancel`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data;
@@ -56,7 +75,12 @@ const TopUpService = {
 
   confirmTopUp: async (topUpId) => {
     try {
-      const response = await axios.put(`${BASE_URL}/topup/${topUpId}/confirm`);
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${BASE_URL}/topup/${topUpId}/confirm`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data;
@@ -65,7 +89,12 @@ const TopUpService = {
 
   getTopUpById: async (topUpId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/topup/${topUpId}`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/topup/${topUpId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data;
@@ -74,7 +103,12 @@ const TopUpService = {
 
   getTopUpByUserId: async (userId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/topup/all/${userId}`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${BASE_URL}/topup/all/${userId}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
       return response.data;
     } catch (error) {
       throw error.response.data.message;
