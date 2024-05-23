@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:8081";
 
 const WalletService = {
   createWallet: async (walletRequest) => {
@@ -24,7 +24,7 @@ const WalletService = {
   getWalletByUserId: async (userId) => {
     try {
       const response = await axios.get(`${BASE_URL}/wallet/${userId}/user`);
-      return response.data;
+      return response;
     } catch (error) {
       throw error.response.data.message;
     }
