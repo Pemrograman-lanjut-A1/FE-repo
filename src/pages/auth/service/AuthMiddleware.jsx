@@ -18,7 +18,6 @@ const AuthMiddleware = {
         try {
             const response = await AuthService.refresh(refreshTokenRequest);
             if (response.token) {
-                console.log(token)
                 localStorage.setItem('token', token); 
                 return false;
             }
