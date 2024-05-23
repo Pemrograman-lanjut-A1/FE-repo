@@ -10,10 +10,19 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    var token;
+    var staffToken;
 
     useEffect(() => {
-        if (AuthMiddleware.isAuthenticated()) {
-            navigate('/');
+        token = AuthMiddleware.isAuthenticated();
+        staffToken = AuthMiddleware.isStaffAuthenticated();
+        if (token) {
+            console.log(token);
+            // navigate('/');
+        }
+        if (staffToken){
+            console.log(staffToken);
+            // navigate('/');
         }
     }, []);
 
@@ -25,7 +34,9 @@ const LoginPage = () => {
                 password : password,
             };
             const response = await AuthService.signIn(signUpData);
+            const staffToken = response.data.StaffToken;
             const token = response.data.userToken;
+            localStorage.setItem('staffToken', staffToken);
             localStorage.setItem('token', token);
             navigate('/'); 
         } catch (error) {

@@ -1,9 +1,10 @@
 async function confirmTopUpPut(topUpId){
+    console.log(localStorage.getItem('staffToken'))
     try {
-        const response = await fetch('34.128.118.113/staff/confirm-topup', {
+        const response = await fetch('http://34.128.118.113/staff/confirm-topup', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('staffToken')}`
             },
             body: JSON.stringify({
                 id: topUpId

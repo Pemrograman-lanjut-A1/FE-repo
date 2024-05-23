@@ -6,6 +6,7 @@ async function deleteAnnouncementPost(id){
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('staffToken')}`,
             },
             body: JSON.stringify({
                 id: id
