@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import AuthService from "../../auth/service/AuthService";
+import { useNavigate } from 'react-router-dom';
+import AuthMiddleware from "../../auth/service/AuthMiddleware";
 
 const PaymentPage = () => {
     const [topUps, setTopUps] = useState([]);
@@ -21,11 +23,16 @@ const PaymentPage = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const toggleShowToast = () => setShowToast(!showToast);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUserWallet();
         fetchTopUps();
         fetchWallet();
+
+        if (!AuthMiddleware.isAuthenticated()) {
+            navigate('/signin');
+        }
     }, []);
 
     const fetchUserWallet = async () => {
@@ -59,7 +66,7 @@ const PaymentPage = () => {
                 const wallet = await WalletService.createWallet(walletData);
                 setUserWallet(wallet.wallet);
                 setWalletAmount(wallet.wallet.amount)
-            } 
+            }
         } catch (error) {
             console.error("Error creating user wallet:", error);
         }
