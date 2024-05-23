@@ -34,7 +34,7 @@ const TopUpService = {
   createTopUp: async (topUpData) => {
     try {
         const token = localStorage.getItem('token');
-        console.log(token + " di create");
+        console.log(topUpData)
         const response = await axios.post(
             `${BASE_URL}/topup/create`,
             topUpData, 
@@ -121,7 +121,7 @@ const TopUpService = {
             'Authorization': `Bearer ${token}`
         }
     });
-      return response.data;
+      return response.data.topUps;
     } catch (error) {
       throw error.response.data.message;
     }
