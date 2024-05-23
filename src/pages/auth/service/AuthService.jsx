@@ -1,12 +1,16 @@
 import axios from "axios";
 
-const BASE_URL = "https://34.128.118.113/api/v1/auth";
+const BASE_URL = "http://34.128.118.113/api/v1/auth";
 
 const AuthService = {
   signUp: async (signUpRequest) => {
     try {
-        const response = await axios.post(`${BASE_URL}/signup`, signUpRequest);
-        return response;
+        const response = (await axios.post(`${BASE_URL}/signup`, signUpRequest, {
+          headers: {
+              'Access-Control-Allow-Credentials': `true`
+          }
+      }))
+        return response.data;
     } catch (error) {
       throw new Error(error || "Sign up failed");
     }
