@@ -26,13 +26,26 @@ const PaymentPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchUserWallet();
-        fetchTopUps();
-        fetchWallet();
-
-        if (!AuthMiddleware.isAuthenticated()) {
-            navigate('/signin');
-        }
+        const initialize = async () => {
+            await fetchUserWallet();
+            await fetchTopUps();
+            await fetchWallet();
+    
+            if (!AuthMiddleware.isAuthenticated()) {
+                navigate('/signin');
+                return;
+            }
+    
+            const isExpired = await AuthMiddleware.isExpired();
+            if (isExpired) {
+                AuthMiddleware.logout();
+                setDescriptionToast("Session Berakhiir, Mohon Login Ulang")
+                setShowToast(true);
+                navigate('/signin');
+            }
+        };
+    
+        initialize();
     }, []);
 
     const fetchUserWallet = async () => {
@@ -43,10 +56,9 @@ const PaymentPage = () => {
                 const userId = decodedToken.Id; 
                 setUserId(userId)
                 setLoggedIn(true);
-                console.log(userId + " wdjawnda")
                 const wallet = await WalletService.getWalletByUserId(userId);
-                setWalletAmount(wallet.data.amount)
-                setUserWallet(wallet.data);
+                setWalletAmount(wallet.amount)
+                setUserWallet(wallet);
             }
         } catch (error) {
             console.error("Error fetching user wallet:", error);
@@ -166,9 +178,6 @@ const PaymentPage = () => {
         <div className="container my-4">
            {!userWallet && (
                 <div className="text-center">
-                    {!loggedIn? (
-                    <h1>Login dulu untuk melihat halaman ini</h1>
-                    ) : (
                     <>
                         <h1>Anda belum memiliki wallet</h1>
                         <div className="card w-50 mx-auto mt-5 p-4">
@@ -178,7 +187,6 @@ const PaymentPage = () => {
                         </div>
                         </div>
                     </>
-                    )}
                 </div>
             )}
             {userWallet && (
@@ -226,7 +234,7 @@ const PaymentPage = () => {
                                         <Dropdown.Toggle variant="success" id="dropdown-basic">
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
-                                            {topUp.topUpMethod !== "CANCELLED" && (
+                                            {topUp.status !== "CANCELLED" && (
                                                 <Dropdown.Item data-bs-toggle="modal" data-bs-target="#cancelModal" onClick={() => setTopUpId(topUp.id)}>Cancel</Dropdown.Item>
                                             )}
                                             <Dropdown.Item data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setTopUpId(topUp.id)}>Hapus</Dropdown.Item>

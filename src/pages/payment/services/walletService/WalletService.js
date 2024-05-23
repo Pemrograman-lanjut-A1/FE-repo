@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://34.142.213.219";
+const BASE_URL = "http://34.142.213.219";
 
 const WalletService = {
   createWallet: async (walletRequest) => {
