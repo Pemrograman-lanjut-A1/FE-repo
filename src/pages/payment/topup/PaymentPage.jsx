@@ -89,7 +89,7 @@ const PaymentPage = () => {
 
     const fetchTopUps = async () => {
       try {
-        const topUpsData = await PaymentService.getAllTopUps();
+        const topUpsData = await PaymentService.getTopUpByUserId(userId);
         setTopUps(topUpsData);
       } catch (error) {
         console.error("Error fetching top-ups:", error);
