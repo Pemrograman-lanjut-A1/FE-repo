@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://34.128.118.113/api/v1/auth";
+const BASE_URL = "https://34.128.118.113/api/v1/auth";
 
 const AuthService = {
   signUp: async (signUpRequest) => {
