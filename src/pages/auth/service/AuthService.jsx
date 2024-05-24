@@ -2,22 +2,25 @@ const BASE_URL = "http://34.142.244.77/api/v1/auth";
 
 const AuthService = {
   signUp: async (signUpRequest) => {
-      try {
-          const response = await fetch(`${BASE_URL}/signup`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Access-Control-Allow-Credentials': 'true'
-              },
-              body: JSON.stringify(signUpRequest)
-          });
-          if (!response.ok) {
-              throw new Error("Sign up failed");
-          }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Sign up failed");
+    try {
+      const response = await fetch(`${BASE_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': 'true',
+        },
+        body: JSON.stringify(signUpRequest),
+      });
+
+      const res = await response.json();
+      if (res.status === 400) {
+        throw new Error(res.message || 'Sign up failed');
       }
+
+      return res;
+    } catch (error) {
+      throw new Error(error.message || 'Sign up failed');
+    }
   },
 
   signUpStaff: async (signUpRequest) => {
