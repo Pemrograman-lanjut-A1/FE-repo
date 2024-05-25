@@ -19,16 +19,17 @@ import CreateAnnouncementPage from './pages/staff-dashboard/announcement/create.
 import PaymentPage from './pages/payment/topup/PaymentPage';
 import LoginPage from './pages/auth/pages/LoginPage';
 import RegisterPage from './pages/auth/pages/RegisterPage';
+import Navbar from './components/Navbar';
 
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/signin" element={<LoginPage />} />
-          <Route exact path="/signup" element={<RegisterPage />} />
-
+          <Route exact path="/signup/:type" element={<RegisterPage />} />
           <Route path="/staff/homepage" element={<StaffHomePage />} />
           <Route
               path="/staff/view-announcement"

@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import backImage from '../assets/sarah-dorweiler-fr0J5-GIVyg-unsplash.jpg'
-import { Link } from 'react-router-dom';
 import AuthService from '../service/AuthService';
 import Toast from 'react-bootstrap/Toast'
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import AuthMiddleware from '../service/AuthMiddleware';
 
 const RegisterPage = () => {
@@ -13,7 +12,7 @@ const RegisterPage = () => {
     const [username, setUsername] = useState('');
     const [error, setError] = useState('');
     const [showToast, setShowToast] = useState(false);
-
+    const { type } = useParams();
     const toggleShowToast = () => setShowToast(!showToast);
 
     const navigate = useNavigate();
@@ -26,18 +25,45 @@ const RegisterPage = () => {
 
     const handleSignUp = async () => {
         try {
+            if (password.length < 8) {
+                setError('Password must be at least 8 characters long.');
+                return;
+            }
+
+            if (!/[A-Z]/.test(password)) {
+                setError('Password must contain at least one uppercase letter.');
+                return;
+            }
+
+            if (!/[@#$!*()%^&+=]/.test(password)) {
+                setError('Password must contain at least one special character.');
+                return;
+            }
+
             const signUpData = {
-                email : email,
-                username : username,
-                password : password,
+                email: email,
+                username: username,
+                password: password,
             };
-            await AuthService.signUp(signUpData)
-            navigate('/signin'); 
+
+            if (type === 'staff') {
+                await AuthService.signUpStaff(signUpData); 
+            } else {
+                await AuthService.signUp(signUpData); 
+            }
+
+            setShowToast(true);
+            navigate('/signin');
         } catch (error) {
-            console.error('Error signing up:', error);
-            setError(error);
+            console.error('Error signing up:', error.message);
+            if (error.message.includes('Username') || error.message.includes('Email')) {
+                setError('Username or email already exists.');
+            } else {
+                setError('Failed to sign up. Please try again later.');
+            }
         }
     };
+    
     return (
     <div className="100-w vh-100" style={{ backgroundColor: '#e8e8e8', minHeight: '100vh' }}>
         <div className="row">
@@ -70,10 +96,9 @@ const RegisterPage = () => {
                 </div>
             </div>
             <div className="col">
-            <img src={backImage} alt="back-img" className='100-w vh-100' />
+                <img src={backImage} alt="back-img" className='100-w vh-100' />
             </div>
-        </div>
-        {showToast && (
+            {showToast && (
                 <ToastContainer position="bottom-end">
                     <Toast show={showToast} onClose={toggleShowToast} delay={3000} autohide>
                             <Toast.Header>
@@ -84,6 +109,7 @@ const RegisterPage = () => {
                     </Toast>
                 </ToastContainer>
             )}
+        </div>
     </div>
   )
 }

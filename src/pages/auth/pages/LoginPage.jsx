@@ -40,12 +40,12 @@ const LoginPage = () => {
             localStorage.setItem('token', token);
             navigate('/'); 
         } catch (error) {
-            console.error('Error signing up:', error);
-            if (error.response && error.response.data && error.response.data.message) {
-              setError(error.response.data.message);
-            } else {
-              setError('Failed to sign up. Please try again later.');
-            }
+            console.error('Error signing up:', error.message);
+            if (error.message.includes('email')) {
+                setError(error.message);
+              } else {
+                setError('Failed to sign up. Please try again later.');
+              }
         }
     };
   return (
@@ -69,7 +69,7 @@ const LoginPage = () => {
                         </button>
                         <p className='mt-2'>Don't have an account?
                             <span>
-                                <Link to="/signup">Sign up</Link>
+                                <Link to="/signup/user">Sign up</Link>
                             </span>
                         </p>
                     </form>
