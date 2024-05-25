@@ -29,12 +29,12 @@ const LoginPage = () => {
             localStorage.setItem('token', token);
             navigate('/'); 
         } catch (error) {
-            console.error('Error signing up:', error);
-            if (error.response && error.response.data && error.response.data.message) {
-              setError(error.response.data.message);
-            } else {
-              setError('Failed to sign up. Please try again later.');
-            }
+            console.error('Error signing up:', error.message);
+            if (error.message.includes('email')) {
+                setError(error.message);
+              } else {
+                setError('Failed to sign up. Please try again later.');
+              }
         }
     };
   return (

@@ -42,24 +42,24 @@ const AuthService = {
       }
   },
 
-  signIn: async (signInRequest) => {
-      try {
-          const response = await fetch(`${BASE_URL}/signin`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(signInRequest)
-          });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Sign in failed");
-          }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Sign in failed");
-      }
-  },
+    signIn: async (signInRequest) => {
+        try {
+            const response = await fetch(`${BASE_URL}/signin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(signInRequest)
+            });
+            const res = await response.json();
+                if (res.status === 401) {
+                    throw new Error(res.message);
+                }
+            return res;
+        } catch (error) {
+            throw new Error(error.message || "Sign in failed");
+        }
+    },
 
   refresh: async (refreshTokenRequest) => {
       try {
