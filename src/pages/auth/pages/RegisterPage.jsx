@@ -26,18 +26,40 @@ const RegisterPage = () => {
 
     const handleSignUp = async () => {
         try {
+            if (password.length < 8) {
+                setError('Password must be at least 8 characters long.');
+                return;
+            }
+    
+            if (!/[A-Z]/.test(password)) {
+                setError('Password must contain at least one uppercase letter.');
+                return;
+            }
+    
+            if (!/[@#$!*()%^&+=]/.test(password)) {
+                setError('Password must contain at least one special character.');
+                return;
+            }
+    
             const signUpData = {
-                email : email,
-                username : username,
-                password : password,
+                email: email,
+                username: username,
+                password: password,
             };
-            await AuthService.signUp(signUpData)
-            navigate('/signin'); 
+    
+            const response = await AuthService.signUp(signUpData);
+            setShowToast(true);
+            navigate('/signin');
         } catch (error) {
-            console.error('Error signing up:', error);
-            setError(error);
+            console.error('Error signing up:', error.message);
+            if (error.message.includes('Username') || error.message.includes('Email')) {
+                setError('Username or email is already exist.');
+              } else {
+                setError('Failed to sign up. Please try again later.');
+              }
         }
     };
+    
     return (
     <div className="100-w vh-100" style={{ backgroundColor: '#e8e8e8', minHeight: '100vh' }}>
         <div className="row">
@@ -72,8 +94,7 @@ const RegisterPage = () => {
             <div className="col">
             <img src={backImage} alt="back-img" className='100-w vh-100' />
             </div>
-        </div>
-        {showToast && (
+            {showToast && (
                 <ToastContainer position="bottom-end">
                     <Toast show={showToast} onClose={toggleShowToast} delay={3000} autohide>
                             <Toast.Header>
@@ -84,6 +105,7 @@ const RegisterPage = () => {
                     </Toast>
                 </ToastContainer>
             )}
+        </div>
     </div>
   )
 }
