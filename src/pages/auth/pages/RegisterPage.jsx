@@ -96,7 +96,7 @@ const RegisterPage = () => {
                 </div>
             </div>
             <div className="col">
-            <img src={backImage} alt="back-img" className='100-w vh-100' />
+                <img src={backImage} alt="back-img" className='100-w vh-100' />
             </div>
             {showToast && (
                 <ToastContainer position="bottom-end">
