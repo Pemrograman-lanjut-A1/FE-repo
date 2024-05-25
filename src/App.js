@@ -14,11 +14,13 @@ import ViewWaitingTopUps from './pages/staff-dashboard/view-waiting-top-ups';
 import PaymentPage from './pages/payment/topup/PaymentPage';
 import LoginPage from './pages/auth/pages/LoginPage';
 import RegisterPage from './pages/auth/pages/RegisterPage';
+import Navbar from './components/Navbar';
 
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/signin" element={<LoginPage />} />
