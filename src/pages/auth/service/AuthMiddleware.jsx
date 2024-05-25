@@ -13,7 +13,6 @@ const AuthMiddleware = {
     logout: () => {
         localStorage.removeItem('token'); 
         localStorage.removeItem('staffToken');
-    }
     },
     isExpired: async () => {
         const token = localStorage.getItem('token');

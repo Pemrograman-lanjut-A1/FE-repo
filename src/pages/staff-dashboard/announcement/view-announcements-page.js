@@ -73,10 +73,13 @@ const ViewAnnouncementsPage = () => {
             <h1>View All Announcements from Spring Boot:</h1>
             {announcements.map(announcement => (
                 <div key={announcement.id} className="announcement-card">
-                    
-                    <p><b>{(announcement.title !== "null" ||announcement.title !== "") ? announcement.title: ""}  </b></p>
+                    {announcement.title !== "null" && announcement.title !== "" && (
+                        <p><b>{announcement.title}</b></p>
+                    )}
                     <p>{announcement.content}</p>
-                    <p>{ (announcement.tag !== "null" || announcement.tag !== "") ? "tag: " + announcement.tag : ""}</p>
+                    {announcement.tag !== "null" && announcement.tag !== "" && (
+                        <p>Tag: {announcement.tag}</p>
+                    )}
                     <p>{formatDate(announcement.creationTimestamp)}</p>
                     <button onClick={() => handleDelete(announcement.id)}>Delete</button>
                 </div>
