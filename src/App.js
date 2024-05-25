@@ -22,7 +22,7 @@ function App() {
       <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/signin" element={<LoginPage />} />
-          <Route exact path="/signup" element={<RegisterPage />} />
+          <Route exact path="/signup/:type" element={<RegisterPage />} />
           <Route path="/staff/homepage" element={<StaffHomePage />} />
           <Route
               path="/staff/view-announcement"
