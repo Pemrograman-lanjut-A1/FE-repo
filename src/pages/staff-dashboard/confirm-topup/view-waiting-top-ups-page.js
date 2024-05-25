@@ -10,7 +10,7 @@ const ViewWaitingTopUpsPage = () => {
   const [topups, setTopUps] = useState([]);
 
   useEffect(() => {
-      axios.get('http://34.128.118.113/staff/view-waiting-top-ups', {
+      axios.get('http://34.142.244.77/staff/view-waiting-top-ups', {
       //axios.get('http://localhost:8080/staff/view-waiting-top-ups', {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('staffToken')}`

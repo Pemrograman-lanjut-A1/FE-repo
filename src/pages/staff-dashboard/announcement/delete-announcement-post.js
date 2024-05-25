@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 
 async function deleteAnnouncementPost(id){
     try {
-        const response = await fetch('http://34.128.118.113/staff/delete-announcement', {
+        const response = await fetch('http://34.142.244.77/staff/delete-announcement', {
+        //const response = await fetch('http://localhost:8080/staff/delete-announcement', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

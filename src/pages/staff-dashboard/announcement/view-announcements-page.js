@@ -30,7 +30,7 @@ const ViewAnnouncementsPage = () => {
 
     useEffect(() => {
         if (userId) { // Ensure userId is set before making the API call
-            axios.get('http://34.128.118.113/staff/get-all-announcements', {
+            axios.get('http://34.142.244.77/staff/get-all-announcements', {
             //axios.get('http://localhost:8080/staff/get-all-announcements', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('staffToken')}`
@@ -74,9 +74,9 @@ const ViewAnnouncementsPage = () => {
             {announcements.map(announcement => (
                 <div key={announcement.id} className="announcement-card">
                     
-                    <p><b>{announcement.title}</b></p>
+                    <p><b>{(announcement.title !== "null" ||announcement.title !== "") ? announcement.title: ""}  </b></p>
                     <p>{announcement.content}</p>
-                    <p>{ announcement.tag ? "tag: " + announcement.tag : ''}</p>
+                    <p>{ (announcement.tag !== "null" || announcement.tag !== "") ? "tag: " + announcement.tag : ""}</p>
                     <p>{formatDate(announcement.creationTimestamp)}</p>
                     <button onClick={() => handleDelete(announcement.id)}>Delete</button>
                 </div>
