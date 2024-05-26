@@ -10,11 +10,7 @@ import ViewAnnouncementsPage from './pages/staff-dashboard/announcement/view-ann
 
 import ViewWaitingTopUpsPage from './pages/staff-dashboard/confirm-topup/view-waiting-top-ups-page';
 import CreateAnnouncementPage from './pages/staff-dashboard/announcement/create.announcement.page';
-import StaffHomePage from "./pages/staff-dashboard/staff-homepage";
 import SellHomePage from "./pages/sell/SellHomePage";
-import ViewAnnouncements from './pages/staff-dashboard/view-announcements';
-import ViewWaitingPayments from './pages/staff-dashboard/view-waiting-payments';
-import ViewWaitingTopUps from './pages/staff-dashboard/view-waiting-top-ups';
 import PaymentPage from './pages/payment/topup/PaymentPage';
 import LoginPage from './pages/auth/pages/LoginPage';
 import RegisterPage from './pages/auth/pages/RegisterPage';
@@ -24,6 +20,8 @@ import CheckoutPage from './pages/buy/CheckoutPage';
 import CreateListingPage from './pages/sell/CreateListingPage';
 import EditListingPage from './pages/sell/EditListingPage';
 import OrderHomepage from './pages/order/OrderHomepage';
+import ListingHomepage from "./pages/listing/ListingHomepage";
+import ListingDetail from "./pages/listing/ListingDetail";
 
 
 function App() {
@@ -35,6 +33,8 @@ function App() {
           <Route exact path="/signin" element={<LoginPage />} />
           <Route exact path="/signup/:type" element={<RegisterPage />} />
           <Route exact path="/sell" element={<SellHomePage />} />
+          <Route exact path="/listing" element={<ListingHomepage />} />
+          <Route exact path="/listing/:id" element={<ListingDetail />} />
           <Route exact path="/order" element={<OrderHomepage />} />
           <Route exact path="/sell/create" element={<CreateListingPage />} />
           <Route path="/sell/edit/:id" element={<EditListingPage />} />

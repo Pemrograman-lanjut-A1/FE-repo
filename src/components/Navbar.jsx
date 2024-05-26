@@ -55,6 +55,22 @@ const Navbar = () => {
                             </li>
                             ):("")
                         }
+                        {(token && isStaff == false) ? (
+                            <>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/listing">Listings</a>
+                                </li>
+                            </>
+                            ):("")
+                        }
+                        {(token && isStaff == false) ? (
+                            <>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/sell">Sell</a>
+                                </li>
+                            </>
+                            ):("")
+                        }
                     </ul>
                     <ul className="navbar-nav ms-auto">
                         {token ? (
