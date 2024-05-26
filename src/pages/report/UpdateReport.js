@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams,  } from 'react-router-dom';
+import AuthService from '../auth/service/AuthService';
 
 function UpdateReport() {
     const { id } = useParams(); // Get the report ID from the URL params
@@ -8,10 +9,13 @@ function UpdateReport() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        const headers = { Authorization: `Bearer ${token}` };
+
         // Fetch the report data from the API
         const fetchReport = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/report/${id}`);
+                const response = await axios.get(`http://34.87.132.52/report/${id}`, { headers });
                 const report = response.data;
                 setDescription(report.description);
                 setLoading(false);
@@ -27,15 +31,17 @@ function UpdateReport() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        const token = localStorage.getItem('token');
+        const headers = { Authorization: `Bearer ${token}` };
+
         const updatedReport = {
             description: description,
         };
 
         try {
             // Send PUT request to update the report
-            await axios.put(`http://localhost:8080/report/${id}`, updatedReport);
+            await axios.put(`http://34.87.132.52/report/update/${id}`, updatedReport, { headers });
             console.log('Report updated successfully');
-            // Redirect the user to the report details page or another appropriate page
         } catch (error) {
             console.error('Error updating report:', error);
         }

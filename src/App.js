@@ -23,6 +23,8 @@ import Navbar from './components/Navbar';
 import MyReportList from "./pages/report/MyReportList";
 import ReportList from "./pages/report/ReportList";
 import UpdateReport from "./pages/report/UpdateReport";
+import CreateReport from "./pages/report/CreateReport";
+import IntermezzoPage from "./pages/report/IntermezzoPage";
 
 
 function App() {
@@ -49,9 +51,11 @@ function App() {
               // element={<ViewWaitingTopUps />}
           />
           <Route path="/payment/" element={<PaymentPage/>} />
-          <Route path="report/my-reports/:authorId" element={<MyReportList/>}/>
+          <Route path="report/my-reports/" element={<MyReportList/>}/>
           <Route path="report/list/:targetId" element={<ReportList/>}/>
           <Route path="report/update/:id" element={<UpdateReport/>}/>
+          <Route path="report/create/" element={<CreateReport/>}/>
+          <Route path="report" element={<IntermezzoPage/>}/>
       </Routes>
     </Router>
 );

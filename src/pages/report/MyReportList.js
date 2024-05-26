@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
+
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import ReportCard from "./component/ReportCard";
+import AuthService from "../auth/service/AuthService";
 
 function MyReportList() {
-    const { authorId } = useParams(); // Get the author ID from the URL params
+    const token = localStorage.getItem('token');
+    const decodedToken = AuthService.parseJwt(token);
+    const authorId = decodedToken.Id;
     const [reports, setReports] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch the list of reports based on the author ID from the API
         const fetchReports = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/report/authors/${authorId}`);
-                const fetchedReports = response.data;
-                setReports(fetchedReports);
-                setLoading(false);
+                const response = await axios.get(`http://34.87.132.52/report/authors/${authorId}`);
+                setReports(response.data);
             } catch (error) {
                 console.error('Error fetching reports:', error);
             }
@@ -23,22 +25,16 @@ function MyReportList() {
         fetchReports();
     }, [authorId]);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    const handleDelete = (id) => {
+        setReports(reports.filter(report => report.id !== id));
+    };
 
     return (
         <div>
-            <h2>Reports by Author ID: {authorId}</h2>
-            <ul>
-                {reports.map((report) => (
-                    <li key={report.id}>
-                        <p>Description: {report.description}</p>
-                        <p>Report Date: {report.reportDate}</p>
-                        {/* Add other report details as needed */}
-                    </li>
-                ))}
-            </ul>
+            <h2>My Created Reports {authorId}</h2>
+            {reports.map(report => (
+                <ReportCard key={report.id} report={report} onDelete={handleDelete} />
+            ))}
         </div>
     );
 }
