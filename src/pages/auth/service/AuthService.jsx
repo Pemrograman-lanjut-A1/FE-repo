@@ -94,7 +94,7 @@ const AuthService = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${token}`,
             },
           });
           if (!response.ok) {
