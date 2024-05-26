@@ -1,3 +1,6 @@
+import axios from "axios";
+import AuthMiddleware from "./AuthMiddleware";
+
 const BASE_URL = "http://34.142.244.77/api/v1/auth";
 
 const AuthService = {
@@ -82,13 +85,18 @@ const AuthService = {
   },
 
   logout: async (token) => {
+    //AuthMiddleware.logout();
+    console.log(localStorage.getItem('token'));
+    console.log(localStorage.getItem('staffToken'));
       try {
+
+        
           const response = await fetch(`${BASE_URL}/logout`, {
-              method: 'POST',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-              }
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
           });
           const res = await response.json();
           if (res.status !== 202) {
