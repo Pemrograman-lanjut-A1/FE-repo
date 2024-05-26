@@ -1,4 +1,5 @@
 import axios from "axios";
+import AuthMiddleware from "./AuthMiddleware";
 
 const BASE_URL = "http://34.142.244.77/api/v1/auth";
 
@@ -83,19 +84,27 @@ const AuthService = {
   },
 
   logout: async (token) => {
+    //AuthMiddleware.logout();
+    console.log(localStorage.getItem('token'));
+    console.log(localStorage.getItem('staffToken'));
       try {
+
+        
           const response = await fetch(`${BASE_URL}/logout`, {
-              method: 'POST',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-              }
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
           });
           if (!response.ok) {
               const errorResponse = await response.json();
               throw new Error(errorResponse.message || "Logout failed");
           }
+          
           return await response.json();
+
+
       } catch (error) {
           throw new Error(error.message || "Logout failed");
       }

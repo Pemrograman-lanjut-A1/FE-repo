@@ -7,6 +7,7 @@ import AuthService from '../../auth/service/AuthService';
 import AuthMiddleware from '../../auth/service/AuthMiddleware';
 
 const ViewAnnouncementsPage = () => {
+    var isStaff = false;
     const [userId, setUserId] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
     const [error, setError] = useState(null);
@@ -14,13 +15,20 @@ const ViewAnnouncementsPage = () => {
     useEffect(() => {
         try {
             if (AuthMiddleware.isStaffAuthenticated()) {
+                isStaff = true;
                 const staffToken = localStorage.getItem('staffToken');
                 console.log("Token before decoding:", staffToken);
                 const decodedToken = AuthService.parseJwt(staffToken);
                 console.log("Decoded token:", decodedToken);
                 setUserId(decodedToken.Id); // Set userId based on the decoded token
-            } else {
-                setError("Error: Token not valid or expired");
+            } 
+            else if (AuthMiddleware.isAuthenticated()){
+                const token = localStorage.getItem('token');
+                const decodedToken = AuthService.parseJwt(token);
+                setUserId(decodedToken.Id);
+            }
+            else{
+
             }
         } catch (error) {
             console.error("Error decoding token:", error);
@@ -30,20 +38,38 @@ const ViewAnnouncementsPage = () => {
 
     useEffect(() => {
         if (userId) { // Ensure userId is set before making the API call
-            axios.get('http://34.142.244.77/staff/get-all-announcements', {
-            //axios.get('http://localhost:8080/staff/get-all-announcements', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('staffToken')}`
-                }
-            })
-            .then(response => {
-                console.log(response);
-                setAnnouncements(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching announcements:', error);
-                setError("Error fetching announcements from backend");
-            });
+            if (isStaff){
+                axios.get('http://34.142.244.77/staff/get-all-announcements', {
+                //axios.get('http://localhost:8080/staff/get-all-announcements', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('staffToken')}`
+                    }
+                })
+                .then(response => {
+                    console.log(response);
+                    setAnnouncements(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching announcements:', error);
+                    setError("This feature is for staff only, please login as staff");
+                });
+            }
+            else{
+                axios.get('http://34.142.244.77/staff/get-all-announcements', {
+                //axios.get('http://localhost:8080/staff/get-all-announcements', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+                .then(response => {
+                    console.log(response);
+                    setAnnouncements(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching announcements:', error);
+                    setError("This feature is for staff only, please login as staff");
+                });
+            };
         }
     }, [userId]); // This effect depends on `userId`
 
@@ -69,7 +95,7 @@ const ViewAnnouncementsPage = () => {
     console.log(announcements);
     return (
         <div>
-            <Navbar/>
+            {isStaff=true ? (<Navbar/>) : ("")}
             <h1>View All Announcements from Spring Boot:</h1>
             {announcements.map(announcement => (
                 <div key={announcement.id} className="announcement-card">
@@ -81,7 +107,7 @@ const ViewAnnouncementsPage = () => {
                         <p>Tag: {announcement.tag}</p>
                     )}
                     <p>{formatDate(announcement.creationTimestamp)}</p>
-                    <button onClick={() => handleDelete(announcement.id)}>Delete</button>
+                    {isStaff=true ? (<button onClick={() => handleDelete(announcement.id)}>Delete</button>) : ("")}
                 </div>
             ))}
         </div>
