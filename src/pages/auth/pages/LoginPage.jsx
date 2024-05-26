@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import AuthService from '../service/AuthService';
 import { useNavigate } from 'react-router-dom';
 import AuthMiddleware from '../service/AuthMiddleware';
-import axios from "axios";
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
