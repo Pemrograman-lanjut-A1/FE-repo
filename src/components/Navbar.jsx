@@ -43,9 +43,6 @@ const Navbar = () => {
                                 </li>
                             </>
                         )}
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Pricing</a>
-                        </li>
                         {isStaff == true? (
                                 <li className="nav-item">
                                 <a className="hav-link" href="/staff/view-announcement">Staff Dashboard</a>
@@ -56,6 +53,22 @@ const Navbar = () => {
                                 <li className="nav-item">
                                 <a className="hav-link" href="/staff/view-announcement">Announcements</a>
                             </li>
+                            ):("")
+                        }
+                        {(token && isStaff == false) ? (
+                            <>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/listing">Listings</a>
+                                </li>
+                            </>
+                            ):("")
+                        }
+                        {(token && isStaff == false) ? (
+                            <>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/sell">Sell</a>
+                                </li>
+                            </>
                             ):("")
                         }
                     </ul>

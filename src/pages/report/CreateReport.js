@@ -37,7 +37,7 @@ function CreateReport() {
 
         try {
             // Send POST request to API to create report
-            const response = await axios.post('http://localhost:8080/report/create', report, {
+            const response = await axios.post('http://34.87.132.52/report/create', report, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
