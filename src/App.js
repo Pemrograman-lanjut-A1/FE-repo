@@ -22,6 +22,11 @@ import EditListingPage from './pages/sell/EditListingPage';
 import OrderHomepage from './pages/order/OrderHomepage';
 import ListingHomepage from "./pages/listing/ListingHomepage";
 import ListingDetail from "./pages/listing/ListingDetail";
+import MyReportList from "./pages/report/MyReportList";
+import CreateReport from "./pages/report/CreateReport";
+import UpdateReport from "./pages/report/UpdateReport";
+import ReportList from "./pages/report/ReportList";
+import IntermezzoPage from "./pages/report/IntermezzoPage";
 
 
 function App() {
@@ -47,7 +52,11 @@ function App() {
           <Route path="/payment/" element={<PaymentPage/>} />
           <Route path="/cart" element={<CartPage/>} />
           <Route path="/checkout" element={<CheckoutPage/>} />
-
+          <Route path="/report/my-reports" element={<MyReportList/>} />
+          <Route path="/report/create" element={<CreateReport/>} />
+          <Route path="/report/update/:id" element={<UpdateReport/>} />
+          <Route path="/report/list/:targetId" element={<ReportList/>} />
+          <Route path="/report" element={<IntermezzoPage/>} />
       </Routes>
     </Router>
 );
