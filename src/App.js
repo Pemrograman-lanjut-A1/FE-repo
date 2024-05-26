@@ -52,6 +52,7 @@ function App() {
           <Route path="/payment/" element={<PaymentPage/>} />
           <Route path="/cart" element={<CartPage/>} />
           <Route path="/checkout" element={<CheckoutPage/>} />
+          <Route path="/checkout" element={<CheckoutPage/>} />
           <Route path="/report/my-reports" element={<MyReportList/>} />
           <Route path="/report/create" element={<CreateReport/>} />
           <Route path="/report/update/:id" element={<UpdateReport/>} />
