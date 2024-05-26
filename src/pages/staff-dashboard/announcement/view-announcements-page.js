@@ -19,9 +19,7 @@ const ViewAnnouncementsPage = () => {
 
             if (AuthMiddleware.isStaffAuthenticated()) {
                 setIsStaff(true);
-                console.log("Token before decoding:", staffToken);
                 const decodedToken = AuthService.parseJwt(staffToken);
-                console.log("Decoded token:", decodedToken);
                 setUserId(decodedToken.Id);
             } else if (AuthMiddleware.isAuthenticated()) {
                 setIsStaff(false);
@@ -35,7 +33,7 @@ const ViewAnnouncementsPage = () => {
             setError("Error occurred while decoding token");
         }
     }, []); // This effect runs only once when the component mounts
-
+    console.log("is staff: " + isStaff);
     useEffect(() => {
         if (userId) { // Ensure userId is set before making the API call
             const url = 'http://34.142.244.77/staff/get-all-announcements';
@@ -77,7 +75,6 @@ const ViewAnnouncementsPage = () => {
         return <h1>{error}</h1>;
     }
 
-    console.log(announcements);
     return (
         <div>
             {isStaff ? (<Navbar/>) : null}
