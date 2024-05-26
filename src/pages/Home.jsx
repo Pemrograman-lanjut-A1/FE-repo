@@ -16,7 +16,7 @@ const Home = () => {
         justifyContent: 'center', // Menempatkan konten di tengah secara horizontal
         alignItems: 'center', // Menempatkan konten di tengah secara vertikal
     };
-
+    
     return (
         <div style={homeStyle}>
             <h1>Home</h1>
