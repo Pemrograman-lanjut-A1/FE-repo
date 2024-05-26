@@ -17,6 +17,7 @@ import LoginPage from './pages/auth/pages/LoginPage';
 import RegisterPage from './pages/auth/pages/RegisterPage';
 import CreateListingPage from './pages/sell/CreateListingPage';
 import EditListingPage from './pages/sell/EditListingPage';
+import OrderHomepage from './pages/order/OrderHomepage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/signin" element={<LoginPage />} />
           <Route exact path="/signup" element={<RegisterPage />} />
           <Route exact path="/sell" element={<SellHomePage />} />
+          <Route exact path="/order" element={<OrderHomepage />} />
           <Route exact path="/sell/create" element={<CreateListingPage />} />
           <Route path="/sell/edit/:id" element={<EditListingPage />} />
           <Route path="/staff/homepage" element={<StaffHomePage />} />

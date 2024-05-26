@@ -60,6 +60,7 @@ const SellHomePage = () => {
         <div className="d-flex flex-column align-items-center gap-3 w-75 mb-3">
             <h2>My Listings</h2>
             <Link to='/sell/create' className="btn btn-secondary w-25">Add new Listing</Link>
+            <Link to='/order' className="btn btn-secondary w-25">See Order</Link>
         </div>
         {/* <div className="d-flex w-75 mb-5">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q"/>
