@@ -1,3 +1,6 @@
+import axios from "axios";
+import AuthMiddleware from "./AuthMiddleware";
+
 const BASE_URL = "http://34.142.244.77/api/v1/auth";
 
 const AuthService = {
@@ -13,7 +16,7 @@ const AuthService = {
       });
 
       const res = await response.json();
-      if (res.status === 400) {
+      if (res.status !== 201) {
         throw new Error(res.message || 'Sign up failed');
       }
 
@@ -32,34 +35,35 @@ const AuthService = {
               },
               body: JSON.stringify(signUpRequest)
           });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Sign up staff failed");
+          const res = await response.json();
+          if (res.status !== 201) {
+            throw new Error(res.message || 'Sign up failed');
           }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Sign up staff failed");
-      }
+    
+          return res;
+        } catch (error) {
+          throw new Error(error.message || 'Sign up failed');
+        }
   },
 
-  signIn: async (signInRequest) => {
-      try {
-          const response = await fetch(`${BASE_URL}/signin`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(signInRequest)
-          });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Sign in failed");
-          }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Sign in failed");
-      }
-  },
+    signIn: async (signInRequest) => {
+        try {
+            const response = await fetch(`${BASE_URL}/signin`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(signInRequest)
+            });
+            const res = await response.json();
+                if (res.status !== 202) {
+                    throw new Error(res.message);
+                }
+            return res;
+        } catch (error) {
+            throw new Error(error.message || "Sign in failed");
+        }
+    },
 
   refresh: async (refreshTokenRequest) => {
       try {
@@ -81,22 +85,28 @@ const AuthService = {
   },
 
   logout: async (token) => {
+    //AuthMiddleware.logout();
+    console.log(localStorage.getItem('token'));
+    console.log(localStorage.getItem('staffToken'));
       try {
+
+        
           const response = await fetch(`${BASE_URL}/logout`, {
-              method: 'POST',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-              }
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
           });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Logout failed");
+          const res = await response.json();
+          if (res.status !== 202) {
+            throw new Error(res.message || 'Logout failed');
           }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Logout failed");
-      }
+    
+          return res;
+        } catch (error) {
+          throw new Error(error.message || 'Logout failed');
+        }
   },
 
   parseJwt: (token) => {

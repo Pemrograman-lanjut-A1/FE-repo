@@ -3,10 +3,17 @@ import AuthService from "./AuthService";
 const AuthMiddleware = {
     isAuthenticated: () => {
         const token = localStorage.getItem('token');
-        return token !== null;
+        return (token !== null && token !== "undefined");
+    },
+
+    isStaffAuthenticated: () => {
+        const staffToken = localStorage.getItem('staffToken');
+        console.log(staffToken !== null);
+        return (staffToken !== null && staffToken !== "undefined");
     },
     logout: () => {
         localStorage.removeItem('token'); 
+        localStorage.removeItem('staffToken');
     },
     isExpired: async () => {
         const token = localStorage.getItem('token');
