@@ -45,6 +45,7 @@ function CreateReport() {
             console.log('Report created:', response.data);
 
             setDescription('');
+            window.location.href = '/report/my-reports';
         } catch (error) {
             console.error('Error creating report:', error);
         }

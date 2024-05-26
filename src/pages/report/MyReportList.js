@@ -31,7 +31,7 @@ function MyReportList() {
 
     return (
         <div>
-            <h2>My Created Reports {authorId}</h2>
+            <h2>My Created Reports</h2>
             {reports.map(report => (
                 <ReportCard key={report.id} report={report} onDelete={handleDelete} />
             ))}

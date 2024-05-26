@@ -14,7 +14,7 @@ function ReportCard({ report, onDelete }) {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8080/report/${report.id}`, {
+            await axios.delete(`http://34.87.132.52/report/${report.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -27,11 +27,8 @@ function ReportCard({ report, onDelete }) {
 
     return (
         <div className="report-card">
-            <h3>Report by {report.authorId}</h3>
-            <p>{report.description}</p>
-            <p>Report Date: {new Date(report.reportDate).toLocaleString()}</p>
-            <p>Target ID: {report.targetId}</p>
-            <p>Target Type: {report.targetType}</p>
+            <p><strong>Description: </strong>{report.description}</p>
+            <p><strong>Report Date:</strong> {new Date(report.reportDate).toLocaleString()}</p>
             <button onClick={handleEdit}>Edit</button>
             <button onClick={handleDelete}>Delete</button>
         </div>

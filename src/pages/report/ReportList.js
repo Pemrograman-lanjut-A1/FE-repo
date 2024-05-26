@@ -30,7 +30,7 @@ function ReportList() {
 
     return (
         <div>
-            <h2>Reports for Target ID: {targetId}</h2>
+            <h2>Report List</h2>
             <div className="report-list">
                 {reports.map((report) => (
                     <div key={report.id} className="report-card">

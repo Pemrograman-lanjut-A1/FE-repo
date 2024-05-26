@@ -42,6 +42,7 @@ function UpdateReport() {
             // Send PUT request to update the report
             await axios.put(`http://34.87.132.52/report/update/${id}`, updatedReport, { headers });
             console.log('Report updated successfully');
+            window.location.href = '/report/my-reports';
         } catch (error) {
             console.error('Error updating report:', error);
         }
