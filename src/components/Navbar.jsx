@@ -4,9 +4,17 @@ import AuthService from '../pages/auth/service/AuthService';
 import AuthMiddleware from '../pages/auth/service/AuthMiddleware';
 
 const Navbar = () => {
+    var isStaff = false;
+    var token;
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-
+    if (AuthMiddleware.isAuthenticated()){
+        token = localStorage.getItem('token');
+      }
+      if(AuthMiddleware.isStaffAuthenticated()){
+        token = localStorage.getItem('staffToken');
+        console.log(token)
+        var isStaff = true;
+      }
     const handleLogout = async () => {
         await AuthService.logout(token);
         AuthMiddleware.logout();
@@ -35,12 +43,25 @@ const Navbar = () => {
                         <li className="nav-item">
                             <a className="nav-link" href="#">Pricing</a>
                         </li>
+                        {isStaff == true? (
+                                <li className="nav-item">
+                                <a className="hav-link" href="/staff/view-announcement">Staff Dashboard</a>
+                            </li>
+                            ):("")
+                        }
+                        {(token && isStaff == false) ? (
+                                <li className="nav-item">
+                                <a className="hav-link" href="/staff/view-announcement">Announcements</a>
+                            </li>
+                            ):("")
+                        }
                     </ul>
                     <ul className="navbar-nav ms-auto">
                         {token ? (
                             <li className="nav-item">
                                 <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
                             </li>
+
                         ) : (
                             <>
                                 <li className="nav-item">

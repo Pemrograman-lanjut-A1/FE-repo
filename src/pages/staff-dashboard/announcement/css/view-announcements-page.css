@@ -1,0 +1,23 @@
+.announcement-card {
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the card */
+    margin-bottom: 10px; /* Spacing between cards */
+}
+
+.announcement-card p {
+    margin-bottom: 10px; /* Spacing between content and button */
+}
+
+.announcement-card button {
+    border: none; /* Remove default button border */
+    background-color: #f44336; /* Red background color */
+    color: white; /* White text color */
+    padding: 5px 10px; /* Padding inside the button */
+    border-radius: 3px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.announcement-card button:hover {
+    background-color: #d32f2f; /* Darker red background color on hover */
+}
