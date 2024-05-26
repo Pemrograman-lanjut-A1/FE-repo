@@ -7,7 +7,7 @@ const CartList = () => {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const token = 'your_jwt_token'; // Replace with the actual JWT token
+                const token = '';
                 const response = await axios.get('/cart/get-items', {
                     headers: {
                         Authorization: `Bearer ${token}`,
