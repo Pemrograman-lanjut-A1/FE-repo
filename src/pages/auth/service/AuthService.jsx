@@ -13,7 +13,7 @@ const AuthService = {
       });
 
       const res = await response.json();
-      if (res.status === 400) {
+      if (res.status !== 201) {
         throw new Error(res.message || 'Sign up failed');
       }
 
@@ -32,14 +32,15 @@ const AuthService = {
               },
               body: JSON.stringify(signUpRequest)
           });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Sign up staff failed");
+          const res = await response.json();
+          if (res.status !== 201) {
+            throw new Error(res.message || 'Sign up failed');
           }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Sign up staff failed");
-      }
+    
+          return res;
+        } catch (error) {
+          throw new Error(error.message || 'Sign up failed');
+        }
   },
 
     signIn: async (signInRequest) => {
@@ -52,7 +53,7 @@ const AuthService = {
                 body: JSON.stringify(signInRequest)
             });
             const res = await response.json();
-                if (res.status === 401) {
+                if (res.status !== 202) {
                     throw new Error(res.message);
                 }
             return res;
@@ -89,14 +90,15 @@ const AuthService = {
                   'Content-Type': 'application/json'
               }
           });
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              throw new Error(errorResponse.message || "Logout failed");
+          const res = await response.json();
+          if (res.status !== 202) {
+            throw new Error(res.message || 'Logout failed');
           }
-          return await response.json();
-      } catch (error) {
-          throw new Error(error.message || "Logout failed");
-      }
+    
+          return res;
+        } catch (error) {
+          throw new Error(error.message || 'Logout failed');
+        }
   },
 
   parseJwt: (token) => {
