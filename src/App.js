@@ -15,6 +15,9 @@ import PaymentPage from './pages/payment/topup/PaymentPage';
 import LoginPage from './pages/auth/pages/LoginPage';
 import RegisterPage from './pages/auth/pages/RegisterPage';
 import Navbar from './components/Navbar';
+import MyReportList from "./pages/report/MyReportList";
+import ReportList from "./pages/report/ReportList";
+import UpdateReport from "./pages/report/UpdateReport";
 
 
 function App() {
@@ -36,6 +39,9 @@ function App() {
               element={<ViewWaitingTopUps />}
           />
           <Route path="/payment/" element={<PaymentPage/>} />
+          <Route path="report/my-reports/:authorId" element={<MyReportList/>}/>
+          <Route path="report/list/:targetId" element={<ReportList/>}/>
+          <Route path="report/update/:id" element={<UpdateReport/>}/>
       </Routes>
     </Router>
 );
