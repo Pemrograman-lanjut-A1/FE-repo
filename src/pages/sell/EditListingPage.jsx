@@ -9,6 +9,7 @@ function EditListingPage() {
     const [description, setDescription] = useState('')
     const [imageUrl, setImageUrl] = useState('')
     const BASE_API_URL = 'http://34.87.132.52/listing'
+    const token = localStorage.getItem('token')
     const navigate = useNavigate()
 
     const getListing = async () => {
@@ -45,7 +46,7 @@ function EditListingPage() {
             stock,
             description,
             imageUrl,
-            sellerId: 'fakeSellerId'
+            sellerId: '9395afee-57f1-4d05-8995-b1a9ca2a5046'
         }
         try {
           const response = await fetch(`${BASE_API_URL}`, {
@@ -53,6 +54,7 @@ function EditListingPage() {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Credentials': 'true',
+              'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(updatedListing)
           });
@@ -62,7 +64,7 @@ function EditListingPage() {
             throw new Error(res.message);
           }
         //   console.log(res)
-        navigate('/sell')
+        window.location.href = '/sell'
 
         } catch (error) {
           throw new Error(error.message);
@@ -103,8 +105,8 @@ function EditListingPage() {
                     <input required type="text" class="form-control" id="imageUrl" placeholder="Enter Image Url"
                     value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}/>
                 </div>
-                <button class="btn btn-primary" 
-                onClick={handleSubmit}>Submit</button>
+                <p class="btn btn-primary" 
+                onClick={handleSubmit}>Submit</p>
             </form>
         </div>
     </div>

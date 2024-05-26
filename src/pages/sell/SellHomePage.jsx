@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import AuthMiddleware from "../auth/service/AuthMiddleware";
+import AuthService from "../auth/service/AuthService";
 
 const SellHomePage = () => {
     const BASE_API_URL = 'http://34.87.132.52/listing'
     const [listings, setListings] = useState([])
+    const [userId, setUserId] = useState(null);
+    const [error, setError] = useState(null);
 
     const getListings = async () => {
         try {
@@ -11,7 +15,7 @@ const SellHomePage = () => {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Credentials': 'true',
+              'Access-Control-Allow-Credentials': 'true'
             },
           });
     
@@ -26,6 +30,7 @@ const SellHomePage = () => {
           throw new Error(error.message);
         }
     }
+
 
     const handleDelete = async (id) => {
         try {
@@ -49,10 +54,29 @@ const SellHomePage = () => {
         }
     }
 
+    
     useEffect(() => {
-        getListings()
-    }, [])
-    // console.log(listings)
+      try {
+        const staffToken = localStorage.getItem('staffToken');
+        const token = localStorage.getItem('token');
+
+        if (AuthMiddleware.isStaffAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(staffToken);
+            setUserId(decodedToken.Id);
+        } else if (AuthMiddleware.isAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(token);
+            setUserId(decodedToken.Id);
+        } else {
+            setError("No valid token found");
+        }
+        console.log({userId})
+    } catch (error) {
+        console.error("Error decoding token:", error);
+        setError("Error occurred while decoding token");
+    }
+      getListings()
+    })
+    console.log(listings)
 
     return (
         <div class="container border p-lg-5 text-white text-center">
@@ -68,8 +92,8 @@ const SellHomePage = () => {
         </div> */}
       <div class="row">
         <div class="col d-flex justify-content-start flex-wrap gap-5">
-            {listings.map((listing, index) => (
-                <div class="card" style={{"width":'15rem'}}>
+            {userId!=null && listings.map((listing, index) => (
+                <div key={index} class="card" style={{"width":'15rem'}} onClick={() => console.log({userId})}>
                     <img src={listing.imageUrl}
                     class="card-img-top object-fit-cover" alt="..." height={190}/>
                     <div class="card-body">

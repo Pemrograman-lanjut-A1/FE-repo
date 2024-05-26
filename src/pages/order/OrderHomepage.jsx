@@ -1,9 +1,13 @@
 import {React, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
+import AuthMiddleware from "../auth/service/AuthMiddleware";
+import AuthService from "../auth/service/AuthService";
 
 function OrderHomepage() {
     const BASE_API_URL = 'http://34.87.132.52/order'
     const [orders, setOrders] = useState([])
+    const [userId, setUserId] = useState('')
+    const [error, setError] = useState('')
 
     const getOrders = async () => {
         try {
@@ -28,8 +32,26 @@ function OrderHomepage() {
     }
 
     useEffect(() => {
-        getOrders()
-    }, [])
+      try {
+        const staffToken = localStorage.getItem('staffToken');
+        const token = localStorage.getItem('token');
+
+        if (AuthMiddleware.isStaffAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(staffToken);
+            setUserId(decodedToken.Id);
+        } else if (AuthMiddleware.isAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(token);
+            setUserId(decodedToken.Id);
+        } else {
+            setError("No valid token found");
+        }
+        console.log({userId})
+    } catch (error) {
+        console.error("Error decoding token:", error);
+        setError("Error occurred while decoding token");
+    }
+      getOrders()
+    })
   return (
     <div class="container border p-lg-5 text-white text-center">
     <div class="bg-dark d-flex flex-column justify-content-center align-items-center rounded p-lg-5">

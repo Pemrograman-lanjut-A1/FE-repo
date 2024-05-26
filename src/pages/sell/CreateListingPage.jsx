@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthMiddleware from "../auth/service/AuthMiddleware";
+import AuthService from "../auth/service/AuthService";
 
 function CreateListingPage() {
     const [name, setName] = useState('')
@@ -7,7 +9,10 @@ function CreateListingPage() {
     const [stock, setStock] = useState(0)
     const [description, setDescription] = useState('')
     const [imageUrl, setImageUrl] = useState('')
+    const [userId, setUserId] = useState('')
+    const [error, setError] = useState('')
     const BASE_API_URL = 'http://34.87.132.52/listing'
+    const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
     const handleSubmit = async () => {
@@ -18,7 +23,7 @@ function CreateListingPage() {
             stock,
             description,
             imageUrl,
-            sellerId: 'fakeId'
+            sellerId: '9395afee-57f1-4d05-8995-b1a9ca2a5046'
         }
         try {
           const response = await fetch(`${BASE_API_URL}`, {
@@ -26,6 +31,7 @@ function CreateListingPage() {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Credentials': 'true',
+              'Authorization' : `Bearer ${token}`
             },
             body: JSON.stringify(newListing)
           });
@@ -34,14 +40,36 @@ function CreateListingPage() {
           if (res.status === 400) {
             throw new Error(res.message);
           }
-        //   console.log(res)
-        // navigate('/sell')
 
+        // window.location.href = '/sell';
+        navigate('/sell')
+        console.log(newListing)
         } catch (error) {
           console.log(error)
           throw new Error(error.message);
         }
     }
+
+    useEffect(() => {
+      try {
+        const staffToken = localStorage.getItem('staffToken');
+        const token = localStorage.getItem('token');
+
+        if (AuthMiddleware.isStaffAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(staffToken);
+            setUserId(decodedToken.Id);
+        } else if (AuthMiddleware.isAuthenticated()) {
+            const decodedToken = AuthService.parseJwt(token);
+            setUserId(decodedToken.Id);
+        } else {
+            setError("No valid token found");
+        }
+    } catch (error) {
+        console.error("Error decoding token:", error);
+        setError("Error occurred while decoding token");
+    }
+  }, [])
+
   return (
     <div class="container border p-lg-5 text-white text-center">
         <div class="bg-dark d-flex flex-column justify-content-center align-items-center rounded p-lg-5">
@@ -73,8 +101,8 @@ function CreateListingPage() {
                         <input required type="text" class="form-control" id="imageUrl" placeholder="Enter Image Url"
                         value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}/>
                     </div>
-                    <button type="submit" class="btn btn-primary" 
-                    onClick={handleSubmit}>Submit</button>
+                    <p class="btn btn-primary" 
+                    onClick={handleSubmit}>Submit</p>
                 </form>
             </div>
         </div>

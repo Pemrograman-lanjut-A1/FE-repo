@@ -50,6 +50,8 @@ const ListingHomepage = () => {
                             <Link to={`/listing/${listing.id}`}>
                                 <button className="btn btn-primary">See Detail</button>
                             </Link>
+                            <Link className="btn btn-danger"
+                            to={`/report/create?targetId=${listing.id}&targetType=item`}>Report</Link>
                         </div>
                     </div>
                 </div>

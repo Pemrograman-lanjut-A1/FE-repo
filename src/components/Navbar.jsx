@@ -43,9 +43,6 @@ const Navbar = () => {
                                 </li>
                             </>
                         )}
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Pricing</a>
-                        </li>
                         {isStaff == true? (
                                 <li className="nav-item">
                                 <a className="hav-link" href="/staff/view-announcement">Staff Dashboard</a>
