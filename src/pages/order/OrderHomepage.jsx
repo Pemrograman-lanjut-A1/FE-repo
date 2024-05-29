@@ -4,14 +4,14 @@ import AuthMiddleware from "../auth/service/AuthMiddleware";
 import AuthService from "../auth/service/AuthService";
 
 function OrderHomepage() {
-    const BASE_API_URL = 'http://34.87.132.52/order'
     const [orders, setOrders] = useState([])
     const [userId, setUserId] = useState('')
     const [error, setError] = useState('')
+    const token = localStorage.getItem("token")
 
     const getOrders = async () => {
         try {
-          const response = await fetch(`${BASE_API_URL}`, {
+          const response = await fetch(`http://34.87.132.52/order`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -23,7 +23,6 @@ function OrderHomepage() {
           if (res.status === 400) {
             throw new Error(res.message);
           }
-        //   console.log(res)
     
           setOrders(res)
         } catch (error) {
@@ -31,27 +30,67 @@ function OrderHomepage() {
         }
     }
 
-    useEffect(() => {
+    const handleCancel = async (id, buyerId, sellerId) => {
+      const updatedOrder = {
+        id,
+        status: "CANCELLED",
+        buyerId,
+        sellerId
+      }
       try {
-        const staffToken = localStorage.getItem('staffToken');
-        const token = localStorage.getItem('token');
-
-        if (AuthMiddleware.isStaffAuthenticated()) {
-            const decodedToken = AuthService.parseJwt(staffToken);
-            setUserId(decodedToken.Id);
-        } else if (AuthMiddleware.isAuthenticated()) {
-            const decodedToken = AuthService.parseJwt(token);
-            setUserId(decodedToken.Id);
-        } else {
-            setError("No valid token found");
+        const response = await fetch(`http://34.87.132.52/order`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': 'true',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updatedOrder)
+        });
+  
+        const res = await response.json();
+        if (res.status === 400) {
+          throw new Error(res.message);
         }
-        console.log({userId})
-    } catch (error) {
-        console.error("Error decoding token:", error);
-        setError("Error occurred while decoding token");
-    }
       getOrders()
-    })
+
+      } catch (error) {
+        throw new Error(error.message);
+      }
+  }
+
+    const handleConfirm = async (id, buyerId, sellerId) => {
+      const updatedOrder = {
+        id,
+        status: "SUCCESS",
+        buyerId,
+        sellerId
+      }
+      try {
+        const response = await fetch(`http://34.87.132.52/order`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Credentials': 'true',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updatedOrder)
+        });
+  
+        const res = await response.json();
+        if (res.status === 400) {
+          throw new Error(res.message);
+        }
+      getOrders()
+
+      } catch (error) {
+        throw new Error(error.message);
+      }
+  }
+
+    useEffect(() => {
+      getOrders()
+    }, [])
   return (
     <div class="container border p-lg-5 text-white text-center">
     <div class="bg-dark d-flex flex-column justify-content-center align-items-center rounded p-lg-5">
@@ -74,13 +113,17 @@ function OrderHomepage() {
                 <td>{order.status}</td>
                 <td>
                     <div className="d-flex justify-content-center gap-2">
-                        <button className="btn btn-danger">
+                        <button 
+                        onClick={() => handleCancel(order.id, order.buyerId, order.sellerId)}
+                        className="btn btn-danger">
                             Cancel
                         </button>
-                        <Link>
+                        <Link to={`/order/${order.id}`}>
                             <button className="btn btn-primary">Lihat</button>
                         </Link>
-                        <button className="btn btn-success">
+                        <button
+                        onClick={() => handleConfirm(order.id, order.buyerId, order.sellerId)}
+                        className="btn btn-success">
                             Confirm
                         </button>
                     </div>
