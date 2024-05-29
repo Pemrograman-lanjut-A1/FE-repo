@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
 const ListingHomepage = () => {
-    const BASE_API_URL = 'http://34.87.132.52/listing'
     const [listings, setListings] = useState([])
 
     const getListings = async () => {
         try {
-          const response = await fetch(`${BASE_API_URL}`, {
+          const response = await fetch(`http://34.87.132.52/listing`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -19,7 +18,6 @@ const ListingHomepage = () => {
           if (res.status === 400) {
             throw new Error(res.message);
           }
-        //   console.log(res)
     
           setListings(res)
         } catch (error) {

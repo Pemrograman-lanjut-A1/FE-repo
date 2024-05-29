@@ -27,6 +27,7 @@ import CreateReport from "./pages/report/CreateReport";
 import UpdateReport from "./pages/report/UpdateReport";
 import ReportList from "./pages/report/ReportList";
 import IntermezzoPage from "./pages/report/IntermezzoPage";
+import OrderDetail from "./pages/order/OrderDetail";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route exact path="/listing" element={<ListingHomepage />} />
           <Route exact path="/listing/:id" element={<ListingDetail />} />
           <Route exact path="/order" element={<OrderHomepage />} />
+          <Route exact path="/order/:id" element={<OrderDetail />} />
           <Route exact path="/sell/create" element={<CreateListingPage />} />
           <Route path="/sell/edit/:id" element={<EditListingPage />} />
           <Route
