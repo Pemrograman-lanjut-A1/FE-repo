@@ -11,7 +11,6 @@ function CreateListingPage() {
     const [imageUrl, setImageUrl] = useState('')
     const [userId, setUserId] = useState('')
     const [error, setError] = useState('')
-    const BASE_API_URL = 'http://34.87.132.52/listing'
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -23,10 +22,10 @@ function CreateListingPage() {
             stock,
             description,
             imageUrl,
-            sellerId: '9395afee-57f1-4d05-8995-b1a9ca2a5046'
+            sellerId: userId
         }
         try {
-          const response = await fetch(`${BASE_API_URL}`, {
+          const response = await fetch(`http://34.87.132.52/listing`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,9 +40,7 @@ function CreateListingPage() {
             throw new Error(res.message);
           }
 
-        // window.location.href = '/sell';
         navigate('/sell')
-        console.log(newListing)
         } catch (error) {
           console.log(error)
           throw new Error(error.message);
@@ -69,6 +66,7 @@ function CreateListingPage() {
         setError("Error occurred while decoding token");
     }
   }, [])
+  console.log({userId, error})
 
   return (
     <div class="container border p-lg-5 text-white text-center">

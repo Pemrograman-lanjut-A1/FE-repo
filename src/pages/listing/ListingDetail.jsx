@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function ListingDetail() {
     const { id } = useParams()
     const [listing, setListing] = useState()
     
-    const BASE_API_URL = 'http://34.87.132.52/listing'
     const getListings = async () => {
         try {
-          const response = await fetch(`${BASE_API_URL}/${id}`, {
+          const response = await fetch(`http://34.87.132.52/listing/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -20,7 +19,6 @@ function ListingDetail() {
           if (res.status === 400) {
             throw new Error(res.message);
           }
-        //   console.log(res)
     
           setListing(res)
         } catch (error) {

@@ -4,14 +4,14 @@ import AuthMiddleware from "../auth/service/AuthMiddleware";
 import AuthService from "../auth/service/AuthService";
 
 const SellHomePage = () => {
-    const BASE_API_URL = 'http://34.87.132.52/listing'
     const [listings, setListings] = useState([])
     const [userId, setUserId] = useState(null);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
 
     const getListings = async () => {
         try {
-          const response = await fetch(`${BASE_API_URL}`, {
+          const response = await fetch(`http://34.87.132.52/listing`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -34,11 +34,12 @@ const SellHomePage = () => {
 
     const handleDelete = async (id) => {
         try {
-          const response = await fetch(`${BASE_API_URL}/${id}`, {
+          const response = await fetch(`http://34.87.132.52/listing/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Credentials': 'true',
+              'Authorization' : `Bearer ${token}`
             },
           });
     
@@ -75,7 +76,7 @@ const SellHomePage = () => {
         setError("Error occurred while decoding token");
     }
       getListings()
-    })
+    }, [])
     console.log(listings)
 
     return (
@@ -86,10 +87,6 @@ const SellHomePage = () => {
             <Link to='/sell/create' className="btn btn-secondary w-25">Add new Listing</Link>
             <Link to='/order' className="btn btn-secondary w-25">See Order</Link>
         </div>
-        {/* <div className="d-flex w-75 mb-5">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q"/>
-            <button class="btn btn-light" type="submit">Search</button>
-        </div> */}
       <div class="row">
         <div class="col d-flex justify-content-start flex-wrap gap-5">
             {userId!=null && listings.map((listing, index) => (

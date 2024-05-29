@@ -8,13 +8,12 @@ function EditListingPage() {
     const [stock, setStock] = useState(0)
     const [description, setDescription] = useState('')
     const [imageUrl, setImageUrl] = useState('')
-    const BASE_API_URL = 'http://34.87.132.52/listing'
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
 
     const getListing = async () => {
         try {
-          const response = await fetch(`${BASE_API_URL}/${id}`, {
+          const response = await fetch(`http://34.87.132.52/listing/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -49,7 +48,7 @@ function EditListingPage() {
             sellerId: '9395afee-57f1-4d05-8995-b1a9ca2a5046'
         }
         try {
-          const response = await fetch(`${BASE_API_URL}`, {
+          const response = await fetch(`http://34.87.132.52/listing`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
